@@ -20,4 +20,24 @@ def test_tokenise_returns_dict_mapping_token_to_numbers():
   "hat": 1
 }
 def test_sort_vocab():
-    pass
+    t = Tokeniser()
+    result = t.sort_vocab({
+    "the": 2,
+    "cat": 1,
+    "in": 1,
+    "hat": 1
+})
+    assert result == [("the", 2), ("cat", 1), ("in", 1), ("hat", 1)]
+
+# def test_split_into_subwords():
+#     t = Tokeniser()
+#     result = t.split_into_subwords(["the", "hat"])
+#     assert result == [["t", "h", "e"], ["h", "a", "t"]]
+
+def test_split_into_subwords_end_of_word():
+    t = Tokeniser()
+    result = t.split_into_subwords(["the", "hat"])
+    assert result == [["t", "h", "e", "</w>"], ["h", "a", "t", "</w>"]]
+
+
+
