@@ -58,4 +58,28 @@ class Tokeniser:
                 counter[pair_char] = counter.get(pair_char, 0) + 1 
 
         return counter
+    
+    def merge_most_frequent_pair(self,subword_tokens: list[list[str]],pair_counts: dict[tuple[str, str], int]) -> list[list[str]]:
+        pair_counts = self.count_symbol_pairs(subword_tokens)
+        if not pair_counts:
+            return subword_tokens
+        sorted_pairs = self.sort_vocab(pair_counts)
+        most_frequent_pairs = sorted_pairs[0][0]
+        first, second = most_frequent_pairs
+        merged_output = []
+        for token in subword_tokens:
+            new_token = []
+            i = 0
+            while i < len(token):
+                if i < len(token) -1 and token[i] == first and token[i+1] == second:
+                    new_token.append(first + second)
+                    i += 2
+                else:
+                    new_token.append(token[i])
+                    i += 1
+            merged_output.append(new_token)
+            
+        return merged_output
+
+
 

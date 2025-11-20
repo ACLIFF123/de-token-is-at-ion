@@ -57,3 +57,22 @@ def test_count_symbol_pairs_returns_expected_pair_frequencies():
     assert result[("a", "r")] == 1
 
 
+
+def test_merge_most_frequent_pair_merges_correctly():
+    t = Tokeniser()
+    subwords = [
+        ["t", "h", "e", "</w>"],
+        ["h", "a", "t", "</w>"]
+    ]
+    pair_counts = {
+        ("t", "h"): 1,
+        ("h", "e"): 1,
+        ("e", "</w>"): 1,
+        ("h", "a"): 1,
+        ("a", "t"): 1,
+        ("t", "</w>"): 1
+    }
+
+    merged = t.merge_most_frequent_pair(subwords, pair_counts)
+    assert merged[0] == ["th", "e", "</w>"]
+    assert merged[1] == ["h", "a", "t", "</w>"]
