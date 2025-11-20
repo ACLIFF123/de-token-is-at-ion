@@ -6,7 +6,7 @@ import string
 
 
 class Tokeniser:
-
+    END_OF_WORD_SYMBOL = "</w>"
     
 
     def __init__(self):
@@ -40,14 +40,22 @@ class Tokeniser:
         return items
     
     def split_into_subwords(self, tokens: list[str]) -> list[list[str]]:
-        END_OF_WORD_SYMBOL = "</w>"
+        
         result = []
 
         for token in tokens:
             chars = list(token)
-            chars.append(END_OF_WORD_SYMBOL)
+            chars.append(self.END_OF_WORD_SYMBOL)
             result.append(chars)
         return result
         
-        
-        
+    def count_symbol_pairs(self, subword_tokens: list[list[str]]) -> dict[tuple[str, str], int]:
+        counter = {}
+
+        for word in subword_tokens:
+            for i in range(len(word) -1):
+                pair_char = (word[i], word[i + 1])
+                counter[pair_char] = counter.get(pair_char, 0) + 1 
+
+        return counter
+

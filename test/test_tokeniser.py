@@ -39,5 +39,21 @@ def test_split_into_subwords_end_of_word():
     result = t.split_into_subwords(["the", "hat"])
     assert result == [["t", "h", "e", "</w>"], ["h", "a", "t", "</w>"]]
 
+def test_split_into_subwords_returns_characters_with_end_symbol():
+    t = Tokeniser()
+    result = t.split_into_subwords(["cat"])
+    assert result == [["c", "a", "t", Tokeniser.END_OF_WORD_SYMBOL]]
+
+
+def test_count_symbol_pairs_returns_expected_pair_frequencies():
+    t = Tokeniser()
+    subwords = [
+        ["c", "a", "t", "</w>"],
+        ["c", "a", "r", "</w>"]
+    ]
+    result = t.count_symbol_pairs(subwords)
+    assert result[("c", "a")] == 2
+    assert result[("a", "t")] == 1
+    assert result[("a", "r")] == 1
 
 
