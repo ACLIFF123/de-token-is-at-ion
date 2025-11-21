@@ -1,10 +1,6 @@
 from typing import List
 import string
 
-
-
-
-
 class Tokeniser:
     END_OF_WORD_SYMBOL = "</w>"
     
