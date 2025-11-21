@@ -76,3 +76,44 @@ def test_merge_most_frequent_pair_merges_correctly():
     merged = t.merge_most_frequent_pair(subwords, pair_counts)
     assert merged[0] == ["th", "e", "</w>"]
     assert merged[1] == ["h", "a", "t", "</w>"]
+
+
+
+
+    def test_build_bpe_vocab_merges_common_pairs_first():
+        t = Tokeniser()
+        tokens = ["aa", "ab", "aa"]
+
+        merged = t.build_bpe_vocab(tokens, num_merges=1)
+
+        expected = [
+            ["aa", "</w>"],  # "aa"
+            ["a", "b", "</w>"],  # "ab"
+            ["aa", "</w>"]  # "aa"
+        ]
+
+        assert merged == expected
+
+
+def test_build_bpe_vocab_multiple_merges():
+    t = Tokeniser()
+    tokens = ["aa", "ab", "aa"]
+   
+    result = t.build_bpe_vocab(tokens, num_merges=2)
+
+		# in the second merge, the most common pair is "aa" with "</w>"
+    expected = [
+        ["aa</w>"],  
+        ["a", "b", "</w>"],  
+        ["aa</w>"]   
+    ]
+
+    assert result == expected
+
+            
+def test_vocab_tracks_merged_symbols():
+        t = Tokeniser()
+        t.build_bpe_vocab(["aa", "ab", "aa"], num_merges=2)
+        vocab = t.get_vocab()
+        assert "a", "aa" and "aa</w>" in vocab
+    

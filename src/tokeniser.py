@@ -10,7 +10,7 @@ class Tokeniser:
     
 
     def __init__(self):
-        pass
+        self.vocab: set[str] = set()
 
     def tokenise(self, text:str) -> List[str]:
 
@@ -66,20 +66,41 @@ class Tokeniser:
         sorted_pairs = self.sort_vocab(pair_counts)
         most_frequent_pairs = sorted_pairs[0][0]
         first, second = most_frequent_pairs
+
         merged_output = []
+
         for token in subword_tokens:
             new_token = []
             i = 0
+
             while i < len(token):
-                if i < len(token) -1 and token[i] == first and token[i+1] == second:
+                if i < len(token) - 1 and token[i] == first and token[i+1] == second:
                     new_token.append(first + second)
                     i += 2
                 else:
                     new_token.append(token[i])
                     i += 1
+
             merged_output.append(new_token)
-            
+
         return merged_output
+        
+    def build_bpe_vocab(self,tokens: list[str],num_merges: int) -> list[list[str]]:
+        
 
+        subword_tokens = self.split_into_subwords(tokens)
 
+        for word in subword_tokens:
+            for symbol in word:
+                 self.vocab.add(symbol)
+    
+        for _ in range(num_merges):
+            pair_counts = self.count_symbol_pairs(subword_tokens)
+    
+            subword_tokens = self.merge_most_frequent_pair(subword_tokens, pair_counts)
 
+        return subword_tokens
+    
+    def get_vocab(self) -> set[str]:
+        return self.vocab
+        
